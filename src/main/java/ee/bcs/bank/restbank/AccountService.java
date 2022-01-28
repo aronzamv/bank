@@ -111,4 +111,27 @@ public class AccountService {
         requestResult.setAccountId(accountId);
         return requestResult;
     }
+
+    public RequestResult updateAccountLockStatus(List<AccountDto> accounts, int accountId) {
+        RequestResult requestResult = new RequestResult();
+        if (!accountIdExists(accounts, accountId)) {
+            requestResult.setError("Account ID " + accountId + " does not exist.");
+            requestResult.setAccountId(accountId);
+            return requestResult;
+        }
+
+        AccountDto account = getAccountById(accounts, accountId);
+        //kui on luks tee lukust lahti, kui ei ole, siis pane lukku
+        if (account.getLocked()) {
+            account.setLocked(false);
+            requestResult.setMessage("Account lock is removed.");
+        } else {
+            account.setLocked(true);
+            requestResult.setMessage("Account is locked.");
+        }
+
+        requestResult.setAccountId(accountId);
+        return requestResult;
+    }
+
 }
